@@ -53,12 +53,15 @@ class Conv_TDF(nn.Module):
 
 class Conv_TDF_net_trim(nn.Module):
     def __init__(self, device, load, model_name, target_name, lr, epoch, 
-                 L, l, g, dim_f, dim_t, k=3, hop=1024, bn=None, bias=True):
+                 L, l, g, dim_f, dim_t, n_fft, k=3, hop=1024, bn=None, bias=True):
         
         super(Conv_TDF_net_trim, self).__init__()
         
-        self.dim_f, self.dim_t = 2**dim_f, 2**dim_t
-        self.n_fft = self.dim_f * n_fft_scale[target_name]
+        #self.dim_f, self.dim_t = 2**dim_f, 2**dim_t
+        #self.n_fft = self.dim_f * n_fft_scale[target_name]
+        self.dim_f = dim_f
+        self.dim_t = 2**dim_t
+        self.n_fft = n_fft
         self.hop = hop
         self.n_bins = self.n_fft//2+1
         self.chunk_size = hop * (self.dim_t-1)
@@ -214,7 +217,7 @@ def spec_effects(wave, algorithm='invert', value=None):
     return wave
 
     
-def get_models(name, device, load=True, stems='bdov'):
+def get_models(name, device, dim_f, dim_t, n_fft, load=True, stems='bdov'):
     
     if name=='tdf_extra':
         models = []
@@ -225,7 +228,8 @@ def get_models(name, device, load=True, stems='bdov'):
                     model_name='Conv-TDF', target_name='bass', 
                     lr=0.0001, epoch=0, 
                     L=11, l=3, g=32, bn=8, bias=False,
-                    dim_f=11, dim_t=8
+                    dim_f=dim_f, dim_t=dim_t,
+                    n_fft=n_fft
                 )
             )
         if 'd' in stems:
@@ -235,7 +239,8 @@ def get_models(name, device, load=True, stems='bdov'):
                     model_name='Conv-TDF', target_name='drums', 
                     lr=0.0001, epoch=0, 
                     L=9, l=3, g=32, bn=8, bias=False,
-                    dim_f=11, dim_t=7
+                    dim_f=dim_f, dim_t=dim_t,
+                    n_fft=n_fft
                 )
             )
         if 'o' in stems:
@@ -245,7 +250,8 @@ def get_models(name, device, load=True, stems='bdov'):
                     model_name='Conv-TDF', target_name='other', 
                     lr=0.0001, epoch=0, 
                     L=11, l=3, g=32, bn=8, bias=False, 
-                    dim_f=11, dim_t=8
+                    dim_f=dim_f, dim_t=dim_t,
+                    n_fft=n_fft
                 )
             )
         if 'v' in stems:
@@ -255,7 +261,8 @@ def get_models(name, device, load=True, stems='bdov'):
                     model_name='Conv-TDF', target_name='vocals', 
                     lr=0.0001, epoch=0, 
                     L=11, l=3, g=32, bn=8, bias=False, 
-                    dim_f=11, dim_t=8
+                    dim_f=dim_f, dim_t=dim_t,
+                    n_fft=n_fft
                 )
             )
         return models

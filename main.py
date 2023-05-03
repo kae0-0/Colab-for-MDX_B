@@ -50,11 +50,11 @@ class Predictor:
         self.onnx_models = {}
         c = 0
         if args.onnx != 'off':
-            self.models = get_models('tdf_extra', load=False, device=cpu, stems=args.stems)
+            self.models = get_models('tdf_extra', load=False, device=cpu, dim_f=args.dim_f, dim_t=args.dim_t, n_fft=args.n_fft, stems=args.stems)
             print(f'Loading onnx model{"s" if len(self.models) > 1 else ""}...',end=' ')
             for model in self.models:
                 c+=1
-                self.onnx_models[c] = ort.InferenceSession(os.path.join(args.onnx,model.target_name+'.onnx'))
+                self.onnx_models[c] = ort.InferenceSession(os.path.join(args.onnx,model.target_name+'.onnx'), providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
             print('done')
         
     def prediction(self, m,b,d,o,v):
@@ -185,8 +185,16 @@ class Predictor:
                     _ort = self.onnx_models[mod]
                     spek = model.stft(mix_waves)
                     
-                    tar_waves = model.istft(torch.tensor(_ort.run(None, {'input': spek.cpu().numpy()})[0]))#.cpu()
-
+                    
+                    
+                    #DENOISE ADDON CHANGES (taken from UVR denoise feature)
+                    if args.denoise:
+                        spec_pred = -_ort.run(None, {'input': -spek.cpu().numpy()})[0]*0.5+_ort.run(None, {'input': spek.cpu().numpy()})[0]*0.5
+                        tar_waves = model.istft(torch.tensor(spec_pred))#.cpu()
+                    else:
+                        tar_waves = model.istft(torch.tensor(_ort.run(None, {'input': spek.cpu().numpy()})[0]))#.cpu()
+                    #DENOISE FIN
+                    
                     tar_signal = tar_waves[:,:,trim:-trim].transpose(0,1).reshape(2, -1).numpy()[:, :-pad]
 
                     start = 0 if mix == 0 else margin_size
@@ -290,9 +298,18 @@ def main():
     """
 
     p.add_argument('--channel','-c', type=int, default=64)
+    
+    
+    p.add_argument('--denoise',default=False, action='store_true',
+                              help='denoise oputput')
+    p.add_argument('--n_fft', type=int, default=7680)
+    p.add_argument('--dim_f', type=int, default=3072)
+    p.add_argument('--dim_t', type=int, default=8)
+    
+    
     p.add_argument('--overlap','-ov', type=float, default=0.5)
     args = p.parse_args()
-
+    
     autoDL = downloader(args.input)
     isLink = False
     args.input = autoDL[0]
