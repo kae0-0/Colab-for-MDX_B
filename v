@@ -1,6 +1,5 @@
 
 
-Changelog:
-  -  More models!
-  -  Added new arguments - n_fft, dim_f and dim_t for compability
-  -  Updated packages - torch==1.13.1, onnxruntime==1.14.1 etc.
+Updates:
+  -added Kim Vocal 2 and de-reverb by FoxyJoy!
+  -added old 406 vocal and karaoke 2 fix
