@@ -13,14 +13,14 @@
         "mdx_n_fft_scale_set": 5120,
         "primary_stem": "Instrumental"
     },
-    "Karokee Aggr": {
+    "Karokee_AGGR": {
         "compensate": 1.035,
         "mdx_dim_f_set": 2048,
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 5120,
         "primary_stem": "Instrumental"
     },
-    "MDX-KIM Ins ft_other": {
+    "Kim ft other instrumental model": {
         "compensate": 1.020,
         "mdx_dim_f_set": 3072,
         "mdx_dim_t_set": 8,
@@ -55,7 +55,7 @@
         "mdx_n_fft_scale_set": 6144,
         "primary_stem": "Instrumental"
     },
-    "MDX-UVR-NET Main 406": {
+    "MDX-UVR Vocal Model 406": {
         "compensate": 1.035,
         "mdx_dim_f_set": 3072,
         "mdx_dim_t_set": 8,
@@ -125,14 +125,14 @@
         "mdx_n_fft_scale_set": 7680,
         "primary_stem": "Vocals"
     },
-    "MDX-UVR-Kim Vocal Model 2": {
+    "MDX-UVR-Kim Vocal Model 2 (Kim vocal 2)": {
         "compensate": 1.043,
         "mdx_dim_f_set": 3072,
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 7680,
         "primary_stem": "Vocals"
     },
-    "DeVerbHQ_FoxJoy": {
+    "(de)Reverb HQ By FoxJoy": {
         "compensate": 1.035,
         "mdx_dim_f_set": 3072,
         "mdx_dim_t_set": 9,
