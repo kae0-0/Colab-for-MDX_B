@@ -22,6 +22,10 @@ import warnings
 import sys
 import librosa
 from math import ceil
+import pathlib
+
+
+
 warnings.filterwarnings("ignore")
 cpu = torch.device('cpu')
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -316,6 +320,7 @@ def main():
     if len(autoDL) == 2:
         isLink = True
     _basename = os.path.splitext(os.path.basename(args.input))[0]
+    _basename = _basename + " (" + os.path.basename(args.onnx) + " chunks="+ str(args.chunks) +")"
     if not os.path.exists(os.path.join(args.output,_basename)):
         os.makedirs(os.path.join(args.output,_basename))
     if args.model == 'off' and args.onnx == 'off':
@@ -360,8 +365,16 @@ def main():
             if not os.path.isfile(os.path.join(args.onnx,os.path.splitext(stems[c])[0])+'.onnx'):
                 raise FileNotFoundError(f'{os.path.splitext(stems[c])[0]}.onnx not found')
     output = lambda x, stem: os.path.join(x,stems[stem])
-    e = os.path.join(args.output,_basename)
 
+    #output_meta = pathlib.PurePath('/folderA/folderB/folderC/folderD/')
+    #print(os.path.join(args.output,_basename,os.path.basename(args.onnx)))
+    #path.name
+
+
+    
+    e = os.path.join(args.output,_basename)
+    
+    print("Processing: " + _basename)
     pred = Predictor()
     pred.prediction_setup(demucs_name=args.model,
                           channels=args.channel)
