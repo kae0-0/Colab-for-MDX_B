@@ -20,7 +20,7 @@
         "mdx_n_fft_scale_set": 5120,
         "primary_stem": "Instrumental"
     },
-    "Kim ft other instrumental model": {
+    "MDX-KIM Ins ft_other": {
         "compensate": 1.020,
         "mdx_dim_f_set": 3072,
         "mdx_dim_t_set": 8,
@@ -50,9 +50,16 @@
     },
     "MDX-UVR Ins Model 496 - inst main-MDX 2.1": {
         "compensate": 1.035,
-        "mdx_dim_f_set": 3072,
+        "mdx_dim_f_set": 2048,
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 6144,
+        "primary_stem": "Instrumental"
+    },
+    "MDX-UVR-NET Main 406": {
+        "compensate": 1.035,
+        "mdx_dim_f_set": 3072,
+        "mdx_dim_t_set": 8,
+        "mdx_n_fft_scale_set": 7680,
         "primary_stem": "Instrumental"
     },
     "MDX-UVR Ins Model Full Band 292": {
@@ -116,6 +123,20 @@
         "mdx_dim_f_set": 3072,
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 7680,
+        "primary_stem": "Vocals"
+    },
+    "MDX-UVR-Kim Vocal Model 2": {
+        "compensate": 1.043,
+        "mdx_dim_f_set": 3072,
+        "mdx_dim_t_set": 8,
+        "mdx_n_fft_scale_set": 7680,
+        "primary_stem": "Vocals"
+    },
+    "DeVerbHQ_FoxJoy": {
+        "compensate": 1.035,
+        "mdx_dim_f_set": 3072,
+        "mdx_dim_t_set": 9,
+        "mdx_n_fft_scale_set": 6144,
         "primary_stem": "Vocals"
     }
 }
