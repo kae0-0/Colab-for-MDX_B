@@ -49,10 +49,10 @@
         "primary_stem": "Instrumental"
     },
     "MDX-UVR Ins Model 496 - inst main-MDX 2.1": {
-        "compensate": 1.035,
+        "compensate": 1.025,
         "mdx_dim_f_set": 2048,
         "mdx_dim_t_set": 8,
-        "mdx_n_fft_scale_set": 6144,
+        "mdx_n_fft_scale_set": 5120,
         "primary_stem": "Instrumental"
     },
     "MDX-UVR Vocal Model 406": {
