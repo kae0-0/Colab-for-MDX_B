@@ -5,6 +5,7 @@ from numpy.lib import ediff1d, source
 import soundfile as sf
 import torch
 import numpy as np
+from scipy import signal
 from demucs.model import Demucs
 from demucs.utils import apply_model
 from models import get_models, spec_effects
@@ -23,8 +24,9 @@ import sys
 import librosa
 from math import ceil
 import pathlib
-import audiosegment
-import pydub.scipy_effects
+from scipy.io.wavfile import write
+from scipy.signal import firwin, lfilter
+
 
 warnings.filterwarnings("ignore")
 cpu = torch.device('cpu')
@@ -71,6 +73,9 @@ class Predictor:
         mix, rate = librosa.load(m, mono=False, sr=44100)
         if args.normalise:
             self.normalise(mix)
+        #lowpass filter if model is not fullband
+        if args.cutoff > 0:
+          mix = lp_filter(mix,args.cutoff)
         if mix.ndim == 1:
             mix = np.asfortranarray([mix,mix])   
         mix = mix.T
@@ -267,12 +272,21 @@ def downloader(link, supress=False, dl=False):
     except:
         return [link]
 
-def lp_filter(audio,cutoff):
+
+def lp_filter(audio, cutoff, sr=44100):
+    print(cutoff)
+    # Créer un filtre passe-bas à fenêtre
+    numtaps = 201
+    taps = firwin(numtaps, cutoff, fs=sr)
     
-    audio = audiosegment.from_file(audio)
-    filtered_audio = audio.low_pass_filter(cutoff, order=48)
-       
-    filtered_audio.export("filtered.wav", format='wav')
+    # Appliquer le filtre à l'audio
+    filtered_audio = lfilter(taps, 1.0, audio)
+    
+    # Normaliser l'audio filtré
+    max_value = max(abs(filtered_audio.max()), abs(filtered_audio.min()))
+    normalized_audio = filtered_audio / max_value
+    
+    return normalized_audio
 
 def main():
     global args
@@ -381,9 +395,7 @@ def main():
 
     
     e = os.path.join(args.output,_basename)
-    if args.cutoff > 0:
-        print(f"The model has a cutoff ! Output files will be filtered at {args.cutoff}Hz !")
-        lp_filter(args.input,args.cutoff)
+
     print("Processing: " + _basename)
 
     pred = Predictor()
@@ -391,33 +403,21 @@ def main():
                           channels=args.channel)
     
     # split
-    if args.cutoff > 0:
-      pred.prediction(
-        m="filtered.wav",
+    pred.prediction(
+      m=args.input,			
 
-        b=output(e, 0),
-        d=output(e, 1),
-        o=output(e, 2),
-        v=output(e, 3)
-      )
-    
-    if args.cutoff == 0:
-      pred.prediction(
-        m=args.input,			
-
-        b=output(e, 0),
-        d=output(e, 1),
-        o=output(e, 2),
-        v=output(e, 3)
-      )
+      b=output(e, 0),
+      d=output(e, 1),
+      o=output(e, 2),
+      v=output(e, 3)
+    )
 
     if isLink:
         os.rename(os.path.join(args.output,_basename),
                   os.path.join(args.output,autoDL[1]))
         if os.path.isfile(args.input):
             os.remove(args.input)
-    if args.cutoff > 0:
-      os.remove("filtered.wav")
+    
 if __name__ == '__main__':
     start_time = time.perf_counter()
     main()
