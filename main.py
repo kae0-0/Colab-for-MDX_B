@@ -23,8 +23,8 @@ import sys
 import librosa
 from math import ceil
 import pathlib
-
-
+import audiosegment
+import pydub.scipy_effects
 
 warnings.filterwarnings("ignore")
 cpu = torch.device('cpu')
@@ -67,12 +67,12 @@ class Predictor:
                  'drums',
                  'others',
                  'vocals']
-        #mix, rate = sf.read(m)
+
         mix, rate = librosa.load(m, mono=False, sr=44100)
         if args.normalise:
             self.normalise(mix)
         if mix.ndim == 1:
-            mix = np.asfortranarray([mix,mix])
+            mix = np.asfortranarray([mix,mix])   
         mix = mix.T
         sources = self.demix(mix.T)
         print('-'*20)
@@ -267,6 +267,29 @@ def downloader(link, supress=False, dl=False):
     except:
         return [link]
 
+def lp_filter(audio,cutoff):
+    
+    # Importing a WAV file named "1.wav". You can import other formats too, as documented in the "Quickstart" section of README.markdown
+    audio = audiosegment.from_file(audio)
+    print('audiosegment loaded')
+    # Put a 4th-order low pass filter at 80Hz.  
+    filtered_audio = audio.low_pass_filter(cutoff, order=48)
+    # (The cutoff frequency, in this case 80Hz, is attenuated by 3dB. Frequencies above the specified frequency are attenuated according to the order of the filter. In this example, a 4th order filter is specified. This means an attenuation of 24dB per octave, i.e. 160Hz is attenuated by 12dB, 240Hz (an octave above) is attenuated by 24dB, 480Hz is attenuated by 48dB, etc.)
+    print('filtered ok')
+    # Save the filtered audio file. The first argument is your desired filename with the file extension.
+    filtered_audio.export("filtered.wav", format='wav')
+    #return audiosegment_to_librosawav(filtered_audio)
+
+def audiosegment_to_librosawav(audiosegment):    
+    channel_sounds = audiosegment.split_to_mono()
+    samples = [s.get_array_of_samples() for s in channel_sounds]
+
+    fp_arr = np.array(samples).T.astype(np.float32)
+    fp_arr /= np.iinfo(samples[0].typecode).max
+    fp_arr = fp_arr.reshape(-1)
+
+    return fp_arr
+
 def main():
     global args
     p = argparse.ArgumentParser()
@@ -309,6 +332,7 @@ def main():
     p.add_argument('--n_fft', type=int, default=7680)
     p.add_argument('--dim_f', type=int, default=3072)
     p.add_argument('--dim_t', type=int, default=8)
+    p.add_argument('--cutoff', type=int, default=0)
     
     
     p.add_argument('--overlap','-ov', type=float, default=0.5)
@@ -373,15 +397,16 @@ def main():
 
     
     e = os.path.join(args.output,_basename)
-    
+    lp_filter(args.input,args.cutoff)
     print("Processing: " + _basename)
+
     pred = Predictor()
     pred.prediction_setup(demucs_name=args.model,
                           channels=args.channel)
     
     # split
     pred.prediction(
-        m=args.input,
+        m="filtered.wav",
         
         b=output(e, 0),
         d=output(e, 1),
@@ -395,7 +420,7 @@ def main():
                   os.path.join(args.output,autoDL[1]))
         if os.path.isfile(args.input):
             os.remove(args.input)
-
+    os.remove("filtered.wav")
 if __name__ == '__main__':
     start_time = time.perf_counter()
     main()
