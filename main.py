@@ -274,7 +274,7 @@ def downloader(link, supress=False, dl=False):
 
 
 def lp_filter(audio, cutoff, sr=44100):
-    print(cutoff)
+    print(f"The model has a cutoff, output audio will be filtered above {cutoff}hz !")
     # filtering
     numtaps = 201
     taps = firwin(numtaps, cutoff, fs=sr)
