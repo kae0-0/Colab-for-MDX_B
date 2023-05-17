@@ -5,7 +5,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 6144,
         "primary_stem": "Vocals",
-        "cutoff": 14700
+        "cutoff": 14600
     },
     "Karokee 2": {
         "compensate": 1.035,
@@ -13,7 +13,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 5120,
         "primary_stem": "Instrumental",
-        "cutoff": 17500
+        "cutoff": 17400
     },
     "Karokee_AGGR": {
         "compensate": 1.035,
@@ -21,7 +21,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 5120,
         "primary_stem": "Instrumental",
-        "cutoff": 17500
+        "cutoff": 17400
     },
     "Kim ft other instrumental model": {
         "compensate": 1.020,
@@ -29,7 +29,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 7680,
         "primary_stem": "Instrumental",
-        "cutoff": 17500
+        "cutoff": 17400
     },
     "MDX-UVR Ins Model 415": {
         "compensate": 1.035,
@@ -61,7 +61,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 5120,
         "primary_stem": "Instrumental",
-        "cutoff": 17500
+        "cutoff": 17400
     },
     "MDX-UVR Vocal Model 406": {
         "compensate": 1.035,
@@ -69,7 +69,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 7680,
         "primary_stem": "Instrumental",
-        "cutoff": 17500
+        "cutoff": 17400
     },
     "MDX-UVR Ins Model Full Band 292": {
         "compensate": 1.035,
@@ -109,7 +109,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 7680,
         "primary_stem": "Vocals",
-        "cutoff": 17500
+        "cutoff": 17400
     },
     "MDX-UVR Vocal Model 9662": {
         "compensate": 1.035,
@@ -117,7 +117,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 6144,
         "primary_stem": "Vocals",
-        "cutoff": 14700
+        "cutoff": 14600
     },
     "MDX-UVR Vocal Model 9682": {
         "compensate": 1.035,
@@ -125,7 +125,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 6144,
         "primary_stem": "Vocals",
-        "cutoff": 14700
+        "cutoff": 14600
     },
     "MDX-UVR Vocal Model 9703": {
         "compensate": 1.030,
@@ -133,7 +133,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 6144,
         "primary_stem": "Vocals",
-        "cutoff": 14700
+        "cutoff": 14600
     },
     "MDX-UVR-Kim Vocal Model (old)": {
         "compensate": 1.043,
@@ -141,7 +141,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 7680,
         "primary_stem": "Vocals",
-        "cutoff": 17500
+        "cutoff": 17400
     },
     "MDX-UVR-Kim Vocal Model 2 (Kim vocal 2)": {
         "compensate": 1.043,
@@ -149,7 +149,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 7680,
         "primary_stem": "Vocals",
-        "cutoff": 17500
+        "cutoff": 17400
     },
     "(de)Reverb HQ By FoxJoy": {
         "compensate": 1.035,
