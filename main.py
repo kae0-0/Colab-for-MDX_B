@@ -269,26 +269,10 @@ def downloader(link, supress=False, dl=False):
 
 def lp_filter(audio,cutoff):
     
-    # Importing a WAV file named "1.wav". You can import other formats too, as documented in the "Quickstart" section of README.markdown
     audio = audiosegment.from_file(audio)
-    print('audiosegment loaded')
-    # Put a 4th-order low pass filter at 80Hz.  
     filtered_audio = audio.low_pass_filter(cutoff, order=48)
-    # (The cutoff frequency, in this case 80Hz, is attenuated by 3dB. Frequencies above the specified frequency are attenuated according to the order of the filter. In this example, a 4th order filter is specified. This means an attenuation of 24dB per octave, i.e. 160Hz is attenuated by 12dB, 240Hz (an octave above) is attenuated by 24dB, 480Hz is attenuated by 48dB, etc.)
-    print('filtered ok')
-    # Save the filtered audio file. The first argument is your desired filename with the file extension.
+       
     filtered_audio.export("filtered.wav", format='wav')
-    #return audiosegment_to_librosawav(filtered_audio)
-
-def audiosegment_to_librosawav(audiosegment):    
-    channel_sounds = audiosegment.split_to_mono()
-    samples = [s.get_array_of_samples() for s in channel_sounds]
-
-    fp_arr = np.array(samples).T.astype(np.float32)
-    fp_arr /= np.iinfo(samples[0].typecode).max
-    fp_arr = fp_arr.reshape(-1)
-
-    return fp_arr
 
 def main():
     global args
@@ -397,7 +381,9 @@ def main():
 
     
     e = os.path.join(args.output,_basename)
-    lp_filter(args.input,args.cutoff)
+    if args.cutoff > 0:
+        print(f"The model has a cutoff ! Output files will be filtered at {args.cutoff}Hz !")
+        lp_filter(args.input,args.cutoff)
     print("Processing: " + _basename)
 
     pred = Predictor()
