@@ -13,7 +13,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 5120,
         "primary_stem": "Instrumental",
-        "cutoff": 177500
+        "cutoff": 17500
     },
     "Karokee_AGGR": {
         "compensate": 1.035,
@@ -21,7 +21,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 5120,
         "primary_stem": "Instrumental",
-        "cutoff": 177500
+        "cutoff": 17500
     },
     "Kim ft other instrumental model": {
         "compensate": 1.020,
@@ -29,7 +29,7 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 7680,
         "primary_stem": "Instrumental",
-        "cutoff": 177500
+        "cutoff": 17500
     },
     "MDX-UVR Ins Model 415": {
         "compensate": 1.035,
