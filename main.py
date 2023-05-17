@@ -275,18 +275,15 @@ def downloader(link, supress=False, dl=False):
 
 def lp_filter(audio, cutoff, sr=44100):
     print(cutoff)
-    # Créer un filtre passe-bas à fenêtre
+    # filtering
     numtaps = 201
     taps = firwin(numtaps, cutoff, fs=sr)
-    
-    # Appliquer le filtre à l'audio
     filtered_audio = lfilter(taps, 1.0, audio)
-    
-    # Normaliser l'audio filtré
-    max_value = max(abs(filtered_audio.max()), abs(filtered_audio.min()))
-    normalized_audio = filtered_audio / max_value
-    
-    return normalized_audio
+    #normalise audio #NOT NEEDED, NORMALISED IN PREDICATOR !
+    #max_value = max(abs(filtered_audio.max()), abs(filtered_audio.min()))
+    #normalized_audio = filtered_audio / max_value    
+    #return normalized_audio
+    return filtered_audio
 
 def main():
     global args
