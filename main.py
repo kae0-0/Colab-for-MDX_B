@@ -391,22 +391,33 @@ def main():
                           channels=args.channel)
     
     # split
-    pred.prediction(
+    if args.cutoff > 0:
+      pred.prediction(
         m="filtered.wav",
-        
+
         b=output(e, 0),
         d=output(e, 1),
         o=output(e, 2),
         v=output(e, 3)
+      )
+    
+    if args.cutoff == 0:
+      pred.prediction(
+        m=args.input,			
 
-    )
+        b=output(e, 0),
+        d=output(e, 1),
+        o=output(e, 2),
+        v=output(e, 3)
+      )
 
     if isLink:
         os.rename(os.path.join(args.output,_basename),
                   os.path.join(args.output,autoDL[1]))
         if os.path.isfile(args.input):
             os.remove(args.input)
-    os.remove("filtered.wav")
+    if args.cutoff > 0:
+      os.remove("filtered.wav")
 if __name__ == '__main__':
     start_time = time.perf_counter()
     main()
