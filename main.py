@@ -276,14 +276,8 @@ def downloader(link, supress=False, dl=False):
 
 def lp_filter(audio, cutoff, sr=44100):
     print(f"The model has a cutoff, output audio will be filtered above {cutoff}hz !")
-    # filtering
-    numtaps = 201
-    taps = firwin(numtaps, cutoff, fs=sr)
-    filtered_audio = lfilter(taps, 1.0, audio)
-    #normalise audio #NOT NEEDED, NORMALISED IN PREDICATOR !
-    #max_value = max(abs(filtered_audio.max()), abs(filtered_audio.min()))
-    #normalized_audio = filtered_audio / max_value    
-    #return normalized_audio
+    b, a = signal.butter(10, cutoff, fs=sr)
+    filtered_audio = signal.filtfilt(b, a, audio)
     return filtered_audio
 
 def main():
