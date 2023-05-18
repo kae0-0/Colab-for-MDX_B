@@ -272,28 +272,7 @@ def downloader(link, supress=False, dl=False):
     except:
         return [link]
     
-    
-    
-def run_mixer(self, mix, sources):
-        try:
-            if self.is_mixer_mode and len(sources) == 4:
-                mixer = MdxnetSet.Mixer(self.device, self.mixer_path).eval()
-                with torch.no_grad():
-                    mix = torch.tensor(mix, dtype=torch.float32)
-                    sources_ = torch.tensor(sources).detach()
-                    x = torch.cat([sources_, mix.unsqueeze(0)], 0)
-                    sources_ = mixer(x)
-                final_source = np.array(sources_)
-            else:
-                final_source = sources
-        except Exception as e:
-            error_name = f'{type(e).__name__}'
-            traceback_text = ''.join(traceback.format_tb(e.__traceback__))
-            message = f'{error_name}: "{e}"\n{traceback_text}"'
-            print('Mixer Failed: ', message)
-            final_source = sources
-            
-        return final_source
+
 
 def lp_filter(audio, cutoff, sr=44100):
     print(f"The model has a cutoff, output audio will be filtered above {cutoff}hz !")
