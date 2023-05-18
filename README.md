@@ -4,7 +4,7 @@ https://colab.research.google.com/github/jarredou/Colab-for-MDX_B/blob/main/MDX_
 
 
 todo : 
-- [x] WIP ~~FIX MIXTURE HIGH FREQUENCY LEAKS IN SECONDARY STEMS (lowpass filter)~~ 
+- [x] DONE ~~FIX MIXTURE HIGH FREQUENCY LEAKS IN SECONDARY STEMS (lowpass filter)~~ 
 - [ ] fix filenaming for non-vocals models
 - [ ] ~~implement MDXMixer~~ useless for vocals/instru separations.
 - [ ] update demucs3 -> demucs4
