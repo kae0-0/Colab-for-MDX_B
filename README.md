@@ -2,6 +2,7 @@
 Colaboratory Notebook for new MDX models from UVR5 GUI with custom tweaks (file batch processing, autoload model parameters...)
 https://colab.research.google.com/github/jarredou/Colab-for-MDX_B/blob/main/MDX_Colab.ipynb
 
+Note : This repo is for testing purpose, so is unstable.
 
 todo : 
 - [x] DONE ~~FIX MIXTURE HIGH FREQUENCY LEAKS IN SECONDARY STEMS (lowpass filter)~~ 
