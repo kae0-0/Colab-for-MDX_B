@@ -5,7 +5,7 @@ https://colab.research.google.com/github/jarredou/Colab-for-MDX_B/blob/main/MDX_
 Note : This repo is for testing purpose, so is unstable.
 
 todo : 
-- [x] DONE ~~FIX MIXTURE HIGH FREQUENCY LEAKS IN SECONDARY STEMS (lowpass filter)~~ 
+- [ ] FIX MIXTURE HIGH FREQUENCY LEAKS IN SECONDARY STEMS ~~(lowpass filter)~~ => "Fullband trick"
 - [ ] fix filenaming for non-vocals models
 - [ ] ~~implement MDXMixer~~ useless for vocals/instru separations.
 - [ ] update demucs3 -> demucs4
