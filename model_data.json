@@ -144,7 +144,7 @@
         "cutoff": 17400
     },
     "MDX-UVR-Kim Vocal Model 2 (Kim vocal 2)": {
-        "compensate": 1.02,
+        "compensate": 1.009,
         "mdx_dim_f_set": 3072,
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 7680,
