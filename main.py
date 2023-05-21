@@ -77,11 +77,11 @@ class Predictor:
         if args.normalise:
             self.normalise(mix)
         #lowpass filter if model is not fullband
-        #if args.cutoff > 0:
-        #  mix = lp_filter(mix,args.cutoff)
-        #lp_filter_fft
         if args.cutoff > 0:
-          mix = lp_filter_fft(mix,args.cutoff)
+          mix = lp_filter(mix,args.cutoff)
+        #lp_filter_fft
+        #if args.cutoff > 0:
+        #  mix = lp_filter_fft(mix,args.cutoff)
         if mix.ndim == 1:
             mix = np.asfortranarray([mix,mix])   
         mix = mix.T
@@ -282,7 +282,7 @@ def downloader(link, supress=False, dl=False):
 
 def lp_filter(audio, cutoff, sr=44100):
     print(f"The model has a cutoff, output audio will be filtered above {cutoff}hz !")
-    b, a = signal.butter(10, cutoff, fs=sr)
+    b, a = signal.butter(20, cutoff, fs=sr)
     filtered_audio = signal.filtfilt(b, a, audio)
     return filtered_audio
 
