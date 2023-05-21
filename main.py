@@ -26,6 +26,9 @@ from math import ceil
 import pathlib
 from scipy.io.wavfile import write
 from scipy.signal import firwin, lfilter
+from tqdm import tqdm
+from scipy.fftpack import fft, ifft
+
 
 
 warnings.filterwarnings("ignore")
@@ -74,8 +77,11 @@ class Predictor:
         if args.normalise:
             self.normalise(mix)
         #lowpass filter if model is not fullband
+        #if args.cutoff > 0:
+        #  mix = lp_filter(mix,args.cutoff)
+        #lp_filter_fft
         if args.cutoff > 0:
-          mix = lp_filter(mix,args.cutoff)
+          mix = lp_filter_fft(mix,args.cutoff)
         if mix.ndim == 1:
             mix = np.asfortranarray([mix,mix])   
         mix = mix.T
@@ -177,7 +183,7 @@ class Predictor:
             sources = []
             n_sample = cmix.shape[1]
             mod = 0
-            for model in self.models:
+            for model in tqdm(self.models):
                 mod += 1
                 trim = model.n_fft//2
                 gen_size = model.chunk_size-2*trim
@@ -280,6 +286,13 @@ def lp_filter(audio, cutoff, sr=44100):
     filtered_audio = signal.filtfilt(b, a, audio)
     return filtered_audio
 
+def lp_filter_fft(audio, cutoff, sr=44100):
+    print(f"The model has a cutoff, output audio will be filtered above {cutoff}hz !")
+    freq = np.fft.rfftfreq(len(audio), d=1/sr)
+    fft_audio = fft(audio)
+    fft_audio[freq > cutoff] = 0
+    filtered_audio = ifft(fft_audio)
+    return np.real(filtered_audio)
 def main():
     global args
     p = argparse.ArgumentParser()
@@ -388,7 +401,7 @@ def main():
     
     e = os.path.join(args.output,_basename)
 
-    print("Processing: " + _basename)
+    print("\nProcessing: " + _basename)
 
     pred = Predictor()
     pred.prediction_setup(demucs_name=args.model,
