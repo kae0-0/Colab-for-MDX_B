@@ -5,6 +5,7 @@ from numpy.lib import ediff1d, source
 import soundfile as sf
 import torch
 import numpy as np
+from scipy import signal
 from demucs.model import Demucs
 from demucs.utils import apply_model
 from models import get_models, spec_effects
@@ -22,6 +23,14 @@ import warnings
 import sys
 import librosa
 from math import ceil
+import pathlib
+from scipy.io.wavfile import write
+from scipy.signal import firwin, lfilter
+from tqdm import tqdm
+from scipy.fftpack import fft, ifft
+
+
+
 warnings.filterwarnings("ignore")
 cpu = torch.device('cpu')
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -63,12 +72,18 @@ class Predictor:
                  'drums',
                  'others',
                  'vocals']
-        #mix, rate = sf.read(m)
+
         mix, rate = librosa.load(m, mono=False, sr=44100)
         if args.normalise:
             self.normalise(mix)
+        #lowpass filter if model is not fullband
+        if args.cutoff > 0:
+          mix = lp_filter(mix,args.cutoff)
+        #lp_filter_fft
+        #if args.cutoff > 0:
+        #  mix = lp_filter_fft(mix,args.cutoff)
         if mix.ndim == 1:
-            mix = np.asfortranarray([mix,mix])
+            mix = np.asfortranarray([mix,mix])   
         mix = mix.T
         sources = self.demix(mix.T)
         print('-'*20)
@@ -168,7 +183,7 @@ class Predictor:
             sources = []
             n_sample = cmix.shape[1]
             mod = 0
-            for model in self.models:
+            for model in tqdm(self.models):
                 mod += 1
                 trim = model.n_fft//2
                 gen_size = model.chunk_size-2*trim
@@ -262,7 +277,22 @@ def downloader(link, supress=False, dl=False):
         return [inputsha,titlename]
     except:
         return [link]
+    
 
+
+def lp_filter(audio, cutoff, sr=44100):
+    print(f"The model has a cutoff, output audio will be filtered above {cutoff}hz !")
+    b, a = signal.butter(20, cutoff, fs=sr)
+    filtered_audio = signal.filtfilt(b, a, audio)
+    return filtered_audio
+
+def lp_filter_fft(audio, cutoff, sr=44100):
+    print(f"The model has a cutoff, output audio will be filtered above {cutoff}hz !")
+    freq = np.fft.rfftfreq(len(audio), d=1/sr)
+    fft_audio = fft(audio)
+    fft_audio[freq > cutoff] = 0
+    filtered_audio = ifft(fft_audio)
+    return np.real(filtered_audio)
 def main():
     global args
     p = argparse.ArgumentParser()
@@ -305,6 +335,7 @@ def main():
     p.add_argument('--n_fft', type=int, default=7680)
     p.add_argument('--dim_f', type=int, default=3072)
     p.add_argument('--dim_t', type=int, default=8)
+    p.add_argument('--cutoff', type=int, default=0)
     
     
     p.add_argument('--overlap','-ov', type=float, default=0.5)
@@ -316,6 +347,7 @@ def main():
     if len(autoDL) == 2:
         isLink = True
     _basename = os.path.splitext(os.path.basename(args.input))[0]
+    _basename = _basename + " (" + os.path.basename(args.onnx) + " chunks="+ str(args.chunks) +")"
     if not os.path.exists(os.path.join(args.output,_basename)):
         os.makedirs(os.path.join(args.output,_basename))
     if args.model == 'off' and args.onnx == 'off':
@@ -360,7 +392,16 @@ def main():
             if not os.path.isfile(os.path.join(args.onnx,os.path.splitext(stems[c])[0])+'.onnx'):
                 raise FileNotFoundError(f'{os.path.splitext(stems[c])[0]}.onnx not found')
     output = lambda x, stem: os.path.join(x,stems[stem])
+
+    #output_meta = pathlib.PurePath('/folderA/folderB/folderC/folderD/')
+    #print(os.path.join(args.output,_basename,os.path.basename(args.onnx)))
+    #path.name
+
+
+    
     e = os.path.join(args.output,_basename)
+
+    print("\nProcessing: " + _basename)
 
     pred = Predictor()
     pred.prediction_setup(demucs_name=args.model,
@@ -368,13 +409,12 @@ def main():
     
     # split
     pred.prediction(
-        m=args.input,
-        
-        b=output(e, 0),
-        d=output(e, 1),
-        o=output(e, 2),
-        v=output(e, 3)
+      m=args.input,			
 
+      b=output(e, 0),
+      d=output(e, 1),
+      o=output(e, 2),
+      v=output(e, 3)
     )
 
     if isLink:
@@ -382,7 +422,7 @@ def main():
                   os.path.join(args.output,autoDL[1]))
         if os.path.isfile(args.input):
             os.remove(args.input)
-
+    
 if __name__ == '__main__':
     start_time = time.perf_counter()
     main()
