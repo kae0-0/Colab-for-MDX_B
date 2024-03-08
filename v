@@ -6,5 +6,6 @@ Updates:
   - Added another model pack
   - Fixed GPU check
   - HQ_3 model
-  New:
   - voc_ft model
+  New:
+  - HQ_4 model
