@@ -152,5 +152,13 @@
         "mdx_dim_t_set": 8,
         "mdx_n_fft_scale_set": 7680,
         "primary_stem": "Vocals"
+    },
+	    "MDX-UVR Ins Model Full Band new (HQ_4)": {
+        "compensate": 1.035,
+        "mdx_dim_f_set": 2560,
+        "mdx_dim_t_set": 8,
+        "mdx_n_fft_scale_set": 6144,
+        "primary_stem": "Vocals"
     }
+	
 }
